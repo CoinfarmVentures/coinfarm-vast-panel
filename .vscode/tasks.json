@@ -1,0 +1,8 @@
+{
+	"tasks": [
+		{
+			"label": "build",
+			"command": "./collector/node_modules/.bin/tsc.cmd -b"
+		}
+	]
+}

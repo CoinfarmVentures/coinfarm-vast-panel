@@ -1,0 +1,28 @@
+{
+	"name": "coinfarm-vast-panel-collector",
+	"version": "0.0.1",
+	"description": "A Node.js service which collects Vast.ai account data then loads it into MySQL",
+	"main": "main.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CoinfarmVentures/coinfarm-vast-panel.git"
+	},
+	"author": "Coinfarm Ventures L.L.C.",
+	"license": "UNLICENSED",
+	"bugs": {
+		"url": "https://github.com/CoinfarmVentures/coinfarm-vast-panel/issues"
+	},
+	"homepage": "https://github.com/CoinfarmVentures/coinfarm-vast-panel#readme",
+	"devDependencies": {
+		"@types/mysql": "^2.15.21",
+		"typescript": "^5.0.4"
+	},
+	"dependencies": {
+		"@types/node": "^18.11.9",
+		"axios": "^1.4.0",
+		"mysql": "^2.18.1"
+	}
+}
