@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mysqld --verbose --help
 mysqld --user=root &
 P1=$!
 systemctl start grafana-server &
