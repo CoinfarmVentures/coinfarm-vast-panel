@@ -2,7 +2,14 @@ import { VastAPI } from "./api";
 import { DB_CONN_INFO } from "./config";
 import { convertEarnings, convertMachines } from "./conversion";
 import { DBInserter } from "./db";
-import { Credentials } from "./models";
+import {
+	API_Earnings,
+	API_Machine,
+	Credentials,
+	DB_Earnings,
+	DB_Machine,
+} from "./models";
+import { levels as LOG } from "./logging";
 import fsp from "fs/promises";
 
 interface IIterator {
@@ -27,35 +34,74 @@ export class Iterator implements IIterator {
 
 	async readCredentials(): Promise<Credentials> {
 		if (process.env.CREDENTIAL_USER_ID && process.env.CREDENTIAL_AUTH_KEY) {
+			LOG.debug(`Reading credentials from environment`);
 			return {
 				authKey: process.env.CREDENTIAL_AUTH_KEY,
 				userId: Number(process.env.CREDENTIAL_USER_ID),
 			};
 		}
 
-		const txt = await fsp.readFile(
-			`${process.cwd()}/collector/credentials.json`,
-			{
-				encoding: "utf-8",
-			}
-		);
+		const credPath = `${process.cwd()}/collector/credentials.json`;
+		LOG.debug(`Reading credentials from disk (${credPath})`);
+
+		const txt = await fsp.readFile(credPath, {
+			encoding: "utf-8",
+		});
 
 		const credentials: Credentials = JSON.parse(txt) as Credentials;
 		return credentials;
 	}
 
 	async iteration(): Promise<void> {
-		const credentials: Credentials = await this.readCredentials();
-		const apiClient = new VastAPI(credentials);
+		LOG.info("Collecting account data...");
+		let apiClient: VastAPI;
 
-		const rawMachines = await apiClient.getMachines();
-		const dbMachines = convertMachines(rawMachines);
+		try {
+			const credentials: Credentials = await this.readCredentials();
+			apiClient = new VastAPI(credentials);
+		} catch (e) {
+			LOG.error(`Error initializing API client`, e);
+			return;
+		}
 
-		const rawEarnings = await apiClient.getEarnings();
-		const dbEarnings = convertEarnings(rawEarnings);
+		let rawMachines: API_Machine[];
+		let rawEarnings: API_Earnings[];
 
-		const inserter = new DBInserter(DB_CONN_INFO);
-		await inserter.insertMachines(dbMachines);
-		await inserter.insertEarnings(dbEarnings);
+		try {
+			LOG.debug("Getting machines...");
+			rawMachines = await apiClient.getMachines();
+			LOG.debug("Getting earnings...");
+			rawEarnings = await apiClient.getEarnings();
+		} catch (e) {
+			LOG.error(`Error retrieving data from API`, e);
+			return;
+		}
+
+		let dbMachines: DB_Machine[];
+		let dbEarnings: DB_Earnings[];
+
+		try {
+			LOG.debug("Converting machine data...");
+			dbMachines = convertMachines(rawMachines);
+			LOG.debug("Converting earning data...");
+			dbEarnings = convertEarnings(rawEarnings);
+		} catch (e) {
+			LOG.error(`Error transforming data`, e);
+			return;
+		}
+
+		try {
+			const inserter = new DBInserter(DB_CONN_INFO);
+			LOG.debug("Inserting machines...");
+			await inserter.insertMachines(dbMachines);
+			LOG.debug("Inserting earnings...");
+			await inserter.insertEarnings(dbEarnings);
+			LOG.info("Collection successful");
+		} catch (e) {
+			LOG.error(`Error storing data in database`, e);
+			return;
+		}
+
+		LOG.info("Collection complete");
 	}
 }
