@@ -7,7 +7,7 @@ export const POLL_INTERVAL_SEC = process.env.POLL_INTERVAL_SEC
 export const VAST_API_HOSTNAME = process.env.VAST_API_HOSTNAME ?? "console.vast.ai";
 
 export const DB_CONN_INFO: DB_ConnectionInfo = {
-	host: "127.0.0.1",
+	host: "coinfarm-vast-panel-db", //"127.0.0.1",
 	username: "collector",
 	password: "collector",
 	schema: "vast",

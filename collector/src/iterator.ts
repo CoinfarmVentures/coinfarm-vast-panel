@@ -18,9 +18,11 @@ interface IIterator {
 
 export class Iterator implements IIterator {
 	intervalSec: number;
+	credentials: Credentials | undefined;
 
 	constructor(intervalSec: number) {
 		this.intervalSec = intervalSec;
+		this.credentials = undefined;
 	}
 
 	start(): void {
@@ -32,24 +34,28 @@ export class Iterator implements IIterator {
 		}, this.intervalSec * 1000);
 	}
 
-	async readCredentials(): Promise<Credentials> {
+	async readCredentials(): Promise<void> {
 		if (process.env.CREDENTIAL_USER_ID && process.env.CREDENTIAL_AUTH_KEY) {
 			LOG.debug(`Reading credentials from environment`);
-			return {
+			this.credentials = {
 				authKey: process.env.CREDENTIAL_AUTH_KEY,
 				userId: Number(process.env.CREDENTIAL_USER_ID),
 			};
 		}
 
-		const credPath = `${process.cwd()}/collector/credentials.json`;
+		const credPath = `${process.cwd()}/credentials.json`;
 		LOG.debug(`Reading credentials from disk (${credPath})`);
 
 		const txt = await fsp.readFile(credPath, {
 			encoding: "utf-8",
 		});
 
-		const credentials: Credentials = JSON.parse(txt) as Credentials;
-		return credentials;
+		this.credentials = JSON.parse(txt) as Credentials;
+
+		try {
+			await fsp.rm(credPath);
+			LOG.debug(`Deleted credentials from disk for security`);
+		} catch (e) {}
 	}
 
 	async iteration(): Promise<void> {
@@ -57,8 +63,8 @@ export class Iterator implements IIterator {
 		let apiClient: VastAPI;
 
 		try {
-			const credentials: Credentials = await this.readCredentials();
-			apiClient = new VastAPI(credentials);
+			if (!this.credentials) await this.readCredentials();
+			apiClient = new VastAPI(this.credentials as Credentials);
 		} catch (e) {
 			LOG.error(`Error initializing API client`, e);
 			return;
