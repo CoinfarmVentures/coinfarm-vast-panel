@@ -1,0 +1,529 @@
+{
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": {
+					"type": "grafana",
+					"uid": "-- Grafana --"
+				},
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"type": "dashboard"
+			}
+		]
+	},
+	"description": "v0.1.0",
+	"editable": true,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"id": 1,
+	"links": [],
+	"liveNow": false,
+	"panels": [
+		{
+			"datasource": {
+				"type": "mysql",
+				"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+			},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 0,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"lineInterpolation": "smooth",
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"decimals": 3,
+					"mappings": [],
+					"max": 1,
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							}
+						]
+					},
+					"unit": "percentunit"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 8,
+				"w": 12,
+				"x": 0,
+				"y": 0
+			},
+			"id": 4,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "mysql",
+						"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+					},
+					"editorMode": "code",
+					"format": "table",
+					"rawQuery": true,
+					"rawSql": "SELECT Time as timestamp, Hostname, Reliability\r\nFROM machines",
+					"refId": "A",
+					"sql": {
+						"columns": [
+							{
+								"parameters": [],
+								"type": "function"
+							}
+						],
+						"groupBy": [
+							{
+								"property": {
+									"type": "string"
+								},
+								"type": "groupBy"
+							}
+						],
+						"limit": 50
+					}
+				}
+			],
+			"title": "Machine reliability score",
+			"transformations": [
+				{
+					"id": "prepareTimeSeries",
+					"options": {
+						"format": "multi"
+					}
+				}
+			],
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "mysql",
+				"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+			},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "continuous-RdYlGr"
+					},
+					"custom": {
+						"fillOpacity": 60,
+						"lineWidth": 0,
+						"spanNulls": false
+					},
+					"decimals": 0,
+					"mappings": [],
+					"max": 1,
+					"min": 0,
+					"thresholds": {
+						"mode": "percentage",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							}
+						]
+					},
+					"unit": "percentunit"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 9,
+				"w": 12,
+				"x": 12,
+				"y": 0
+			},
+			"id": 2,
+			"options": {
+				"alignValue": "center",
+				"legend": {
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"mergeValues": true,
+				"rowHeight": 0.8,
+				"showValue": "never",
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"dataset": "vast",
+					"datasource": {
+						"type": "mysql",
+						"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+					},
+					"editorMode": "code",
+					"format": "table",
+					"rawQuery": true,
+					"rawSql": "SELECT Time as timestamp, Hostname, (NumGpusDemandOcc / NumGpus) AS OccD\r\nFROM vast.machines",
+					"refId": "A",
+					"sql": {
+						"columns": [
+							{
+								"parameters": [
+									{
+										"name": "NumGpusDemandOcc",
+										"type": "functionParameter"
+									}
+								],
+								"type": "function"
+							},
+							{
+								"parameters": [
+									{
+										"name": "Hostname",
+										"type": "functionParameter"
+									}
+								],
+								"type": "function"
+							}
+						],
+						"groupBy": [
+							{
+								"property": {
+									"type": "string"
+								},
+								"type": "groupBy"
+							}
+						],
+						"limit": 50
+					},
+					"table": "machines"
+				}
+			],
+			"title": "Machine demand occupancy rate",
+			"transformations": [
+				{
+					"id": "prepareTimeSeries",
+					"options": {
+						"format": "multi"
+					}
+				}
+			],
+			"type": "state-timeline"
+		},
+		{
+			"datasource": {
+				"type": "mysql",
+				"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+			},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 0,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"lineInterpolation": "smooth",
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					}
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 15,
+				"w": 12,
+				"x": 0,
+				"y": 8
+			},
+			"id": 1,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"dataset": "vast",
+					"datasource": {
+						"type": "mysql",
+						"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+					},
+					"editorMode": "code",
+					"format": "table",
+					"rawQuery": true,
+					"rawSql": "SELECT Time as timestamp, Hostname, EarnHour FROM vast.machines",
+					"refId": "A",
+					"sql": {
+						"columns": [
+							{
+								"parameters": [
+									{
+										"name": "Hostname",
+										"type": "functionParameter"
+									}
+								],
+								"type": "function"
+							},
+							{
+								"parameters": [
+									{
+										"name": "EarnHour",
+										"type": "functionParameter"
+									}
+								],
+								"type": "function"
+							}
+						],
+						"groupBy": [
+							{
+								"property": {
+									"type": "string"
+								},
+								"type": "groupBy"
+							}
+						],
+						"limit": 50
+					},
+					"table": "machines"
+				}
+			],
+			"title": "Machine revenue",
+			"transformations": [
+				{
+					"id": "prepareTimeSeries",
+					"options": {
+						"format": "multi"
+					}
+				}
+			],
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "mysql",
+				"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+			},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 0,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"lineInterpolation": "linear",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "decgbytes"
+				},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 11,
+				"w": 12,
+				"x": 12,
+				"y": 9
+			},
+			"id": 3,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"dataset": "vast",
+					"datasource": {
+						"type": "mysql",
+						"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+					},
+					"editorMode": "code",
+					"format": "table",
+					"rawQuery": true,
+					"rawSql": "SELECT Time as timestamp, Hostname, DiskFreeGB\r\nFROM machines",
+					"refId": "A",
+					"sql": {
+						"columns": [
+							{
+								"parameters": [],
+								"type": "function"
+							}
+						],
+						"groupBy": [
+							{
+								"property": {
+									"type": "string"
+								},
+								"type": "groupBy"
+							}
+						],
+						"limit": 50
+					},
+					"table": "machines"
+				}
+			],
+			"title": "Free disk space for clients",
+			"transformations": [
+				{
+					"id": "prepareTimeSeries",
+					"options": {
+						"format": "multi"
+					}
+				}
+			],
+			"type": "timeseries"
+		}
+	],
+	"refresh": "",
+	"schemaVersion": 38,
+	"style": "dark",
+	"tags": [],
+	"templating": {
+		"list": []
+	},
+	"time": {
+		"from": "now-1h",
+		"to": "now"
+	},
+	"timepicker": {
+		"refresh_intervals": ["1m", "3m", "5m", "10m", "15m", "30m", "1h"]
+	},
+	"timezone": "",
+	"title": "Farm overview",
+	"uid": "ad0bea78-d14c-40af-b6d8-6b98d7effe73",
+	"version": 3,
+	"weekStart": ""
+}

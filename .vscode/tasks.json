@@ -2,7 +2,8 @@
 	"tasks": [
 		{
 			"label": "build",
-			"command": "./collector/node_modules/.bin/tsc.cmd -b"
+			"command": ["./collector/node_modules/.bin/tsc.cmd"],
+			"args": ["--project", "./collector/tsconfig.json"]
 		}
 	]
 }

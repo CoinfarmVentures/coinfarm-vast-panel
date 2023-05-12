@@ -50,7 +50,7 @@ export class DBInserter implements IDBInserter {
 	async insertMachines(data: DB_Machine[]): Promise<void> {
 		let queryStr = `INSERT INTO machines VALUES\n`;
 		data.forEach((machine: DB_Machine) => {
-			queryStr += `(NOW(), ${machine.MachineID}, ${machine.MaxGpuTemp}, ${machine.ListedGpuRate}, ${machine.NumGpus}, ${machine.NumGpusDemandOcc}, ${machine.NumGpusSpotOcc}, ${machine.NumGpusVacant}, ${machine.DiskFreeGB}, ${machine.DiskBwGBs}, ${machine.InetUpMbps}, ${machine.InetDownMbps}, ${machine.EarnHour}, ${machine.EarnDay}, ${machine.NumStoredRentalsDemand}, ${machine.NumStoredRentalsSpot}),\n`;
+			queryStr += `(NOW(), '${machine.Hostname}', ${machine.MachineID}, ${machine.MaxGpuTemp}, ${machine.ListedGpuRate}, ${machine.NumGpus}, ${machine.NumGpusDemandOcc}, ${machine.NumGpusSpotOcc}, ${machine.NumGpusVacant}, ${machine.DiskFreeGB}, ${machine.DiskBwGBs}, ${machine.InetUpMbps}, ${machine.InetDownMbps}, ${machine.EarnHour}, ${machine.EarnDay}, ${machine.NumStoredRentalsDemand}, ${machine.NumStoredRentalsSpot}, ${machine.Reliability}),\n`;
 		});
 		queryStr = queryStr.substring(0, queryStr.length - 2);
 		queryStr += `;`;

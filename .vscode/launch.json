@@ -10,8 +10,13 @@
 			"name": "Launch Program",
 			"skipFiles": ["<node_internals>/**"],
 			"program": "${workspaceFolder}\\collector\\src\\main.ts",
-			// "preLaunchTask": "build",
-			"outFiles": ["${workspaceFolder}/collector/dist/**/*.js"]
+			"preLaunchTask": "build",
+			"outFiles": ["${workspaceFolder}/collector/dist/**/*.js"],
+			"env": {
+				"POLL_INTERVAL_SEC": "10",
+				"KEEP_CREDENTIALS": "true",
+				"DB_HOSTNAME": "127.0.0.1"
+			}
 		}
 	]
 }

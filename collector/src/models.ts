@@ -81,6 +81,7 @@ export interface DB_Earnings {
 }
 
 export interface DB_Machine {
+	Hostname: string;
 	MachineID: number;
 	MaxGpuTemp: number;
 	ListedGpuRate: number;
@@ -96,6 +97,7 @@ export interface DB_Machine {
 	EarnDay: number;
 	NumStoredRentalsDemand: number;
 	NumStoredRentalsSpot: number;
+	Reliability: number;
 }
 
 export interface DB_ConnectionInfo {

@@ -19,18 +19,29 @@ interface IIterator {
 export class Iterator implements IIterator {
 	intervalSec: number;
 	credentials: Credentials | undefined;
+	inserter: DBInserter | undefined;
 
 	constructor(intervalSec: number) {
 		this.intervalSec = intervalSec;
 		this.credentials = undefined;
+		this.inserter = undefined;
 	}
 
 	start(): void {
 		setTimeout(async () => {
-			await this.iteration();
+			try {
+				await this.iteration();
+			} catch (e) {
+				LOG.error(`General error during first iteration: ${e}`);
+			}
 		}, 0);
+
 		setInterval(async () => {
-			await this.iteration();
+			try {
+				await this.iteration();
+			} catch (e) {
+				LOG.error(`General error during iteration: ${e}`);
+			}
 		}, this.intervalSec * 1000);
 	}
 
@@ -52,10 +63,12 @@ export class Iterator implements IIterator {
 
 		this.credentials = JSON.parse(txt) as Credentials;
 
-		try {
-			await fsp.rm(credPath);
-			LOG.debug(`Deleted credentials from disk for security`);
-		} catch (e) {}
+		if (!process.env.KEEP_CREDENTIALS) {
+			try {
+				await fsp.rm(credPath);
+				LOG.debug(`Deleted credentials from disk for security`);
+			} catch (e) {}
+		}
 	}
 
 	async iteration(): Promise<void> {
@@ -97,11 +110,15 @@ export class Iterator implements IIterator {
 		}
 
 		try {
-			const inserter = new DBInserter(DB_CONN_INFO);
+			if (!this.inserter || this.inserter.connection === null) {
+				LOG.debug("Creating new inserter object...");
+				this.inserter = new DBInserter(DB_CONN_INFO);
+			}
+
 			LOG.debug("Inserting machines...");
-			await inserter.insertMachines(dbMachines);
+			await this.inserter.insertMachines(dbMachines);
 			LOG.debug("Inserting earnings...");
-			await inserter.insertEarnings(dbEarnings);
+			await this.inserter.insertEarnings(dbEarnings);
 			LOG.info("Collection successful");
 		} catch (e) {
 			LOG.error(`Error storing data in database`, e);
