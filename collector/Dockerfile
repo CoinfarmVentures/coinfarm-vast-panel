@@ -6,8 +6,9 @@ COPY ./.npmrc ./.npmrc
 COPY package.json package.json
 COPY tsconfig.json tsconfig.json
 COPY credentials.json credentials.json
+COPY watchdog.sh watchdog.sh
 
 RUN npm install
 RUN npm run build
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:watchdog"]

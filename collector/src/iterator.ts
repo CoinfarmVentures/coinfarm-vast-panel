@@ -62,13 +62,6 @@ export class Iterator implements IIterator {
 		});
 
 		this.credentials = JSON.parse(txt) as Credentials;
-
-		if (!process.env.KEEP_CREDENTIALS) {
-			try {
-				await fsp.rm(credPath);
-				LOG.debug(`Deleted credentials from disk for security`);
-			} catch (e) {}
-		}
 	}
 
 	async iteration(): Promise<void> {

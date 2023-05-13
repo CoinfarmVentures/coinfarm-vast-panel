@@ -6,7 +6,8 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "tsc -b",
-		"start": "node dist/main.js"
+		"start": "node dist/main.js",
+		"start:watchdog": "bash watchdog.sh"
 	},
 	"repository": {
 		"type": "git",

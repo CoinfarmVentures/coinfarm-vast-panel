@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker run -p 3306:3306 --net=coinfarm-vast-panel-net --name coinfarm-vast-panel-db -it coinfarm-vast-panel-db
+docker run -p 5000:3000 --rm --net=coinfarm-vast-panel-net --name coinfarm-vast-panel-grafana -it grafana/grafana
