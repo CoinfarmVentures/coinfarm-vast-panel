@@ -108,11 +108,31 @@ export class Iterator implements IIterator {
 				this.inserter = new DBInserter(DB_CONN_INFO);
 			}
 
-			LOG.debug("Inserting machines...");
-			await this.inserter.insertMachines(dbMachines);
-			LOG.debug("Inserting earnings...");
-			await this.inserter.insertEarnings(dbEarnings);
-			LOG.info("Collection successful");
+			try {
+				LOG.debug("Inserting machines...");
+				await this.inserter.insertMachines(dbMachines);
+			} catch (e) {
+				LOG.warn(`Error storing machine data`, e);
+				try {
+					LOG.debug("Inserting machines (attempt 2)...");
+					await this.inserter.insertMachines(dbMachines);
+				} catch (e2) {
+					LOG.error(`Error storing machine data (attempt 2)`, e2);
+				}
+			}
+
+			try {
+				LOG.debug("Inserting earnings...");
+				await this.inserter.insertEarnings(dbEarnings);
+			} catch (e) {
+				LOG.warn(`Error storing earning data`, e);
+				try {
+					LOG.debug("Inserting earnings (attempt 2)...");
+					await this.inserter.insertEarnings(dbEarnings);
+				} catch (e2) {
+					LOG.error(`Error storing earning data (attempt 2)`, e2);
+				}
+			}
 		} catch (e) {
 			LOG.error(`Error storing data in database`, e);
 			return;

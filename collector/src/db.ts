@@ -20,7 +20,9 @@ export class DBInserter implements IDBInserter {
 		return new Promise((res, rej) => {
 			this.connection = mysql.createConnection({
 				host: this.connectionInfo.host,
+				port: this.connectionInfo.port ?? undefined,
 				user: this.connectionInfo.username,
+				// localAddress: "127.0.0.1",
 				password: this.connectionInfo.password,
 				database: this.connectionInfo.schema,
 			});

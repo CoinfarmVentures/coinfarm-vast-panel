@@ -1,0 +1,40 @@
+services:
+  db:
+    hostname: coinfarm-vast-panel-db
+    image: coinfarm-vast-panel-db
+    # network_mode: bridge
+    networks: [coinfarm-vast-panel-net]
+    build:
+      context: db
+      dockerfile: Dockerfile
+      args: ["BUILD_MYSQL_ROOT_PASSWORD"]
+    ports:
+      - "5001:3306"
+  collector:
+    hostname: coinfarm-vast-panel-collector
+    image: coinfarm-vast-panel-collector
+    # network_mode: bridge
+    networks: [coinfarm-vast-panel-net]
+    build:
+      context: collector
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_started
+  grafana:
+    hostname: coinfarm-vast-panel-grafana
+    image: grafana/grafana:latest
+    # network_mode: bridge
+    networks: [coinfarm-vast-panel-net]
+    depends_on:
+      db:
+        condition: service_started
+    ports:
+      - "5000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+
+
+networks:
+  coinfarm-vast-panel-net:
+    # external: true

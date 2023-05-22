@@ -102,6 +102,7 @@ export interface DB_Machine {
 
 export interface DB_ConnectionInfo {
 	host: string;
+	port: number;
 	username: string;
 	password: string;
 	schema: string;
