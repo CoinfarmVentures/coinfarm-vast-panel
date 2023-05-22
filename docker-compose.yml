@@ -10,6 +10,8 @@ services:
       args: ["BUILD_MYSQL_ROOT_PASSWORD"]
     ports:
       - "5001:3306"
+    volumes:
+      - db-data-vol:/var/lib/mysql
   collector:
     hostname: coinfarm-vast-panel-collector
     image: coinfarm-vast-panel-collector
@@ -34,6 +36,8 @@ services:
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
 
+volumes:
+  db-data-vol:
 
 networks:
   coinfarm-vast-panel-net:

@@ -7,4 +7,4 @@ ENV MYSQL_DATABASE=vast \
 
 ADD initial_server_1683859291.sql /docker-entrypoint-initdb.d
 
-VOLUME ["/var/lib/mysql", "/var/log/mysql"]
+#VOLUME ["/var/lib/mysql", "/var/log/mysql"]
