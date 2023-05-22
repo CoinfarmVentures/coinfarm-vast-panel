@@ -10,3 +10,4 @@ import { Iterator } from "./iterator";
 
 const iter: Iterator = new Iterator(POLL_INTERVAL_SEC);
 iter.start();
+console.log("Started loop");

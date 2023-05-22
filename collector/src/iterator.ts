@@ -34,7 +34,7 @@ export class Iterator implements IIterator {
 			} catch (e) {
 				LOG.error(`General error during first iteration: ${e}`);
 			}
-		}, 0);
+		}, 60000);
 
 		setInterval(async () => {
 			try {
@@ -113,12 +113,12 @@ export class Iterator implements IIterator {
 				await this.inserter.insertMachines(dbMachines);
 			} catch (e) {
 				LOG.warn(`Error storing machine data`, e);
-				try {
-					LOG.debug("Inserting machines (attempt 2)...");
-					await this.inserter.insertMachines(dbMachines);
-				} catch (e2) {
-					LOG.error(`Error storing machine data (attempt 2)`, e2);
-				}
+				// try {
+				// 	LOG.debug("Inserting machines (attempt 2)...");
+				// 	await this.inserter.insertMachines(dbMachines);
+				// } catch (e2) {
+				// 	LOG.error(`Error storing machine data (attempt 2)`, e2);
+				// }
 			}
 
 			try {
@@ -126,12 +126,12 @@ export class Iterator implements IIterator {
 				await this.inserter.insertEarnings(dbEarnings);
 			} catch (e) {
 				LOG.warn(`Error storing earning data`, e);
-				try {
-					LOG.debug("Inserting earnings (attempt 2)...");
-					await this.inserter.insertEarnings(dbEarnings);
-				} catch (e2) {
-					LOG.error(`Error storing earning data (attempt 2)`, e2);
-				}
+				// try {
+				// 	LOG.debug("Inserting earnings (attempt 2)...");
+				// 	await this.inserter.insertEarnings(dbEarnings);
+				// } catch (e2) {
+				// 	LOG.error(`Error storing earning data (attempt 2)`, e2);
+				// }
 			}
 		} catch (e) {
 			LOG.error(`Error storing data in database`, e);

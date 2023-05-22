@@ -1,6 +1,8 @@
 # coinfarm-vast-panel
 A free, powerful monitoring interface for hosts on Vast.ai
 
+Currently all data will be deleted every time the service is restarted, but this will be fixed very soon
+
 ## Requirements
 1. Vast.AI host account
 2. Linux OS or Windows OS with Git Bash/MINGW64
