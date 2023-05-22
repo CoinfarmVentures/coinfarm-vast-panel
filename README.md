@@ -1,6 +1,8 @@
 # coinfarm-vast-panel
 A free, powerful monitoring interface for hosts on Vast.ai
 
+![image info](demo1.png)
+
 ## Requirements
 1. Vast.AI host account
 2. Linux OS or Windows OS with Git Bash/MINGW64
