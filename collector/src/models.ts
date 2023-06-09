@@ -98,6 +98,7 @@ export interface DB_Machine {
 	NumStoredRentalsDemand: number;
 	NumStoredRentalsSpot: number;
 	Reliability: number;
+	Listed: boolean;
 }
 
 export interface DB_ConnectionInfo {

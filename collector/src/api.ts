@@ -42,7 +42,7 @@ export class VastAPI implements IVastAPI {
 
 	async getMachines(): Promise<API_Machine[]> {
 		const rawData = (
-			await this.getRequest<{ machines: API_Machine_Resp }>("machines")
+			await this.getRequest<{ machines: API_Machine_Resp }>("machines/")
 		).machines;
 		const machines: API_Machine[] = [];
 

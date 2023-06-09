@@ -36,6 +36,7 @@ const convertMachine = (apiMachine: API_Machine): DB_Machine => {
 			(Number(apiMachine.current_rentals_resident) ?? 0) -
 			(Number(apiMachine.current_rentals_on_demand) ?? 0),
 		Reliability: Number(apiMachine.reliability2 ?? 0),
+		Listed: Boolean(apiMachine.listed),
 	};
 };
 
