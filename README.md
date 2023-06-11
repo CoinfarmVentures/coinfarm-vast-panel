@@ -13,6 +13,8 @@ A free, powerful monitoring interface for hosts on Vast.ai
 
 ## Setup
 
+Clone this repository. Run `chmod 700 -R setup.sh update.sh build.sh` if you're on Linux
+
 Navigate to https://cloud.vast.ai/host/machines/# in your web browser
 
 Open the debugging console with 'inspect element' (F12 key). Enter this code: 
