@@ -14,6 +14,8 @@ echo "{\"authKey\": \"${AUTH_KEY}\", \"userId\": ${USER_ID}}" > $CRED_PATH
 echo "Building stack..."
 ./build.sh
 
+chmod -R 777 grafana/data
+
 echo "Starting stack..."
 docker compose up -d
 
