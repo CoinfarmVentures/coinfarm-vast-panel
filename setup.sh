@@ -15,6 +15,7 @@ echo "Building stack..."
 ./build.sh
 
 chmod -R 777 grafana/data
+chmod -R 777 grafana/provisioning
 
 echo "Starting stack..."
 docker compose up -d
