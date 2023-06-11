@@ -19,7 +19,7 @@
 	"editable": true,
 	"fiscalYearStartMonth": 0,
 	"graphTooltip": 0,
-	"id": 1,
+	"id": 2,
 	"links": [],
 	"liveNow": false,
 	"panels": [
@@ -48,7 +48,7 @@
 							"viz": false
 						},
 						"lineInterpolation": "smooth",
-						"lineWidth": 1,
+						"lineWidth": 2,
 						"pointSize": 5,
 						"scaleDistribution": {
 							"type": "linear"
@@ -63,6 +63,7 @@
 							"mode": "off"
 						}
 					},
+					"decimals": 3,
 					"mappings": [],
 					"thresholds": {
 						"mode": "absolute",
@@ -79,7 +80,23 @@
 					},
 					"unit": "currencyUSD"
 				},
-				"overrides": []
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "Total"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "text",
+									"mode": "fixed"
+								}
+							}
+						]
+					}
+				]
 			},
 			"gridPos": {
 				"h": 15,
@@ -153,6 +170,18 @@
 					"options": {
 						"format": "multi"
 					}
+				},
+				{
+					"id": "calculateField",
+					"options": {
+						"alias": "Total",
+						"mode": "reduceRow",
+						"reduce": {
+							"include": [],
+							"reducer": "sum"
+						},
+						"replaceFields": false
+					}
 				}
 			],
 			"type": "timeseries"
@@ -190,7 +219,7 @@
 				"overrides": []
 			},
 			"gridPos": {
-				"h": 10,
+				"h": 12,
 				"w": 12,
 				"x": 12,
 				"y": 0
@@ -292,6 +321,345 @@
 							"tooltip": false,
 							"viz": false
 						},
+						"lineInterpolation": "smooth",
+						"lineWidth": 1,
+						"pointSize": 5,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"decimals": 3,
+					"mappings": [],
+					"max": 1,
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							}
+						]
+					},
+					"unit": "percentunit"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "Average"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "text",
+									"mode": "fixed"
+								}
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 14,
+				"w": 12,
+				"x": 12,
+				"y": 12
+			},
+			"id": 4,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"targets": [
+				{
+					"datasource": {
+						"type": "mysql",
+						"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+					},
+					"editorMode": "code",
+					"format": "table",
+					"rawQuery": true,
+					"rawSql": "SELECT Time as timestamp, Hostname, Reliability\r\nFROM machines",
+					"refId": "A",
+					"sql": {
+						"columns": [
+							{
+								"parameters": [],
+								"type": "function"
+							}
+						],
+						"groupBy": [
+							{
+								"property": {
+									"type": "string"
+								},
+								"type": "groupBy"
+							}
+						],
+						"limit": 50
+					}
+				}
+			],
+			"title": "Machine reliability score",
+			"transformations": [
+				{
+					"id": "prepareTimeSeries",
+					"options": {
+						"format": "multi"
+					}
+				},
+				{
+					"id": "calculateField",
+					"options": {
+						"alias": "Average",
+						"mode": "reduceRow",
+						"reduce": {
+							"reducer": "mean"
+						}
+					}
+				}
+			],
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "mysql",
+				"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+			},
+			"description": "",
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "bars",
+						"fillOpacity": 0,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"lineInterpolation": "linear",
+						"lineWidth": 1,
+						"pointSize": 3,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"decimals": 2,
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					},
+					"unit": "currencyUSD"
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "GpuEarn"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "green",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "StoEarn"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "purple",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "UploadEarn"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "yellow",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "DownloadEarn"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "orange",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "Total"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "blue",
+									"mode": "fixed"
+								}
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 8,
+				"w": 12,
+				"x": 0,
+				"y": 15
+			},
+			"id": 5,
+			"options": {
+				"legend": {
+					"calcs": [],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"pluginVersion": "9.5.1",
+			"targets": [
+				{
+					"dataset": "vast",
+					"datasource": {
+						"type": "mysql",
+						"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+					},
+					"editorMode": "code",
+					"format": "table",
+					"rawQuery": true,
+					"rawSql": "SELECT \r\n  Time as timestamp, (GpuEarn + StoEarn + UploadEarn + DownloadEarn) AS Total,\r\n  GpuEarn, StoEarn, UploadEarn, DownloadEarn \r\nFROM vast.earnings\r\nWHERE MachineID = $machine;",
+					"refId": "A",
+					"sql": {
+						"columns": [
+							{
+								"parameters": [
+									{
+										"name": "Time",
+										"type": "functionParameter"
+									}
+								],
+								"type": "function"
+							}
+						],
+						"groupBy": [
+							{
+								"property": {
+									"type": "string"
+								},
+								"type": "groupBy"
+							}
+						],
+						"limit": 50
+					},
+					"table": "earnings"
+				}
+			],
+			"timeFrom": "30d",
+			"title": "Machine revenue breakdown",
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "mysql",
+				"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+			},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "palette-classic"
+					},
+					"custom": {
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"drawStyle": "line",
+						"fillOpacity": 0,
+						"gradientMode": "none",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
 						"lineInterpolation": "linear",
 						"lineStyle": {
 							"fill": "solid"
@@ -311,6 +679,7 @@
 							"mode": "off"
 						}
 					},
+					"decimals": 3,
 					"mappings": [],
 					"thresholds": {
 						"mode": "absolute",
@@ -330,10 +699,10 @@
 				"overrides": []
 			},
 			"gridPos": {
-				"h": 11,
+				"h": 13,
 				"w": 12,
-				"x": 12,
-				"y": 10
+				"x": 0,
+				"y": 23
 			},
 			"id": 3,
 			"options": {
@@ -390,122 +759,6 @@
 				}
 			],
 			"type": "timeseries"
-		},
-		{
-			"datasource": {
-				"type": "mysql",
-				"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
-			},
-			"fieldConfig": {
-				"defaults": {
-					"color": {
-						"mode": "palette-classic"
-					},
-					"custom": {
-						"axisCenteredZero": false,
-						"axisColorMode": "text",
-						"axisLabel": "",
-						"axisPlacement": "auto",
-						"barAlignment": 0,
-						"drawStyle": "line",
-						"fillOpacity": 0,
-						"gradientMode": "none",
-						"hideFrom": {
-							"legend": false,
-							"tooltip": false,
-							"viz": false
-						},
-						"lineInterpolation": "smooth",
-						"lineWidth": 1,
-						"pointSize": 5,
-						"scaleDistribution": {
-							"type": "linear"
-						},
-						"showPoints": "auto",
-						"spanNulls": false,
-						"stacking": {
-							"group": "A",
-							"mode": "none"
-						},
-						"thresholdsStyle": {
-							"mode": "off"
-						}
-					},
-					"decimals": 3,
-					"mappings": [],
-					"max": 1,
-					"thresholds": {
-						"mode": "absolute",
-						"steps": [
-							{
-								"color": "green",
-								"value": null
-							}
-						]
-					},
-					"unit": "percentunit"
-				},
-				"overrides": []
-			},
-			"gridPos": {
-				"h": 14,
-				"w": 12,
-				"x": 0,
-				"y": 15
-			},
-			"id": 4,
-			"options": {
-				"legend": {
-					"calcs": [],
-					"displayMode": "list",
-					"placement": "bottom",
-					"showLegend": true
-				},
-				"tooltip": {
-					"mode": "single",
-					"sort": "none"
-				}
-			},
-			"targets": [
-				{
-					"datasource": {
-						"type": "mysql",
-						"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
-					},
-					"editorMode": "code",
-					"format": "table",
-					"rawQuery": true,
-					"rawSql": "SELECT Time as timestamp, Hostname, Reliability\r\nFROM machines",
-					"refId": "A",
-					"sql": {
-						"columns": [
-							{
-								"parameters": [],
-								"type": "function"
-							}
-						],
-						"groupBy": [
-							{
-								"property": {
-									"type": "string"
-								},
-								"type": "groupBy"
-							}
-						],
-						"limit": 50
-					}
-				}
-			],
-			"title": "Machine reliability score",
-			"transformations": [
-				{
-					"id": "prepareTimeSeries",
-					"options": {
-						"format": "multi"
-					}
-				}
-			],
-			"type": "timeseries"
 		}
 	],
 	"refresh": "5m",
@@ -513,7 +766,32 @@
 	"style": "dark",
 	"tags": [],
 	"templating": {
-		"list": []
+		"list": [
+			{
+				"current": {
+					"selected": true,
+					"text": "9008",
+					"value": "9008"
+				},
+				"datasource": {
+					"type": "mysql",
+					"uid": "b91f0c17-49e5-4d7a-8276-155583a40e37"
+				},
+				"definition": "SELECT DISTINCT(MachineID) FROM vast.machines;",
+				"hide": 0,
+				"includeAll": false,
+				"label": "Machine breakdown for",
+				"multi": false,
+				"name": "machine",
+				"options": [],
+				"query": "SELECT DISTINCT(MachineID) FROM vast.machines;",
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 0,
+				"type": "query"
+			}
+		]
 	},
 	"time": {
 		"from": "now-12h",
@@ -525,6 +803,6 @@
 	"timezone": "",
 	"title": "Farm overview",
 	"uid": "ad0bea78-d14c-40af-b6d8-6b98d7effe73",
-	"version": 3,
+	"version": 2,
 	"weekStart": ""
 }
