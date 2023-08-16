@@ -13,7 +13,7 @@ A free, powerful monitoring interface for hosts on Vast.ai
 
 ## Setup
 
-Clone this repository. Run `chmod 700 -R setup.sh update.sh build.sh restart.sh` if you're on Linux
+Clone this repository. Run `chmod 700 -R setup.sh update.sh build.sh restart.sh updateCredentials.sh` if you're on Linux
 
 Navigate to https://cloud.vast.ai/host/machines/# in your web browser
 
@@ -52,3 +52,12 @@ docker compose up
 ```
 
 The stack should automatically restart every time the machine restarts.
+
+If your Vast.ai credentials have expired, which happens if you see a 401 unauthorized Axios error in the collector's logs/output, you need to obtain your user ID and auth token again.
+
+Then run `updateCredentials.sh`. Answer `y` to rebuild the collector. Finally, stop & start the application stack with 
+
+```
+docker compose down
+docker compose up
+```
