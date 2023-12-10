@@ -10,3 +10,4 @@ cd db
 ./build.sh
 
 echo "Rebuild complete. You will have to stop/start the application stack"
+rm db/password_sql.txt
