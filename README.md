@@ -58,6 +58,10 @@ docker compose down
 docker compose up
 ```
 
+## Backup
+
+To back up the data in the database container, you can either perform an export from MySQL Workbench on `localhost:5001` with username collector, password collector or run `db/dump_unix.sh`
+
 ## Updating
 
 To update to a new version of the application, run `update.sh`. 
