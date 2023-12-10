@@ -1,14 +1,8 @@
-import { VastAPI } from "./api";
+import { CliVastAPI } from "./api";
 import { DB_CONN_INFO } from "./config";
-import { convertEarnings, convertMachines } from "./conversion";
+import { convertMachines } from "./conversion";
 import { DBInserter } from "./db";
-import {
-	API_Earnings,
-	API_Machine,
-	Credentials,
-	DB_Earnings,
-	DB_Machine,
-} from "./models";
+import { API_Machine, Credentials, DB_Machine } from "./models";
 import { levels as LOG } from "./logging";
 import fsp from "fs/promises";
 
@@ -34,7 +28,7 @@ export class Iterator implements IIterator {
 			} catch (e) {
 				LOG.error(`General error during first iteration: ${e}`);
 			}
-		}, 60000);
+		}, 0);
 
 		setInterval(async () => {
 			try {
@@ -46,10 +40,10 @@ export class Iterator implements IIterator {
 	}
 
 	async readCredentials(): Promise<void> {
-		if (process.env.CREDENTIAL_USER_ID && process.env.CREDENTIAL_AUTH_KEY) {
+		if (process.env.CREDENTIAL_USER_ID && process.env.CREDENTIAL_API_KEY) {
 			LOG.debug(`Reading credentials from environment`);
 			this.credentials = {
-				authKey: process.env.CREDENTIAL_AUTH_KEY,
+				apiKey: process.env.CREDENTIAL_API_KEY,
 				userId: Number(process.env.CREDENTIAL_USER_ID),
 			};
 		}
@@ -66,37 +60,33 @@ export class Iterator implements IIterator {
 
 	async iteration(): Promise<void> {
 		LOG.info("Collecting account data...");
-		let apiClient: VastAPI;
+		let apiClient: CliVastAPI;
 
 		try {
 			if (!this.credentials) await this.readCredentials();
-			apiClient = new VastAPI(this.credentials as Credentials);
+			if (!this.credentials) throw new Error("Failed to obtain credentials");
+
+			apiClient = new CliVastAPI(this.credentials);
 		} catch (e) {
 			LOG.error(`Error initializing API client`, e);
 			return;
 		}
 
 		let rawMachines: API_Machine[];
-		let rawEarnings: API_Earnings[];
 
 		try {
 			LOG.debug("Getting machines...");
 			rawMachines = await apiClient.getMachines();
-			LOG.debug("Getting earnings...");
-			rawEarnings = await apiClient.getEarnings();
 		} catch (e) {
 			LOG.error(`Error retrieving data from API`, e);
 			return;
 		}
 
 		let dbMachines: DB_Machine[];
-		let dbEarnings: DB_Earnings[];
 
 		try {
 			LOG.debug("Converting machine data...");
 			dbMachines = convertMachines(rawMachines);
-			LOG.debug("Converting earning data...");
-			dbEarnings = convertEarnings(rawEarnings);
 		} catch (e) {
 			LOG.error(`Error transforming data`, e);
 			return;
@@ -113,25 +103,6 @@ export class Iterator implements IIterator {
 				await this.inserter.insertMachines(dbMachines);
 			} catch (e) {
 				LOG.warn(`Error storing machine data`, e);
-				// try {
-				// 	LOG.debug("Inserting machines (attempt 2)...");
-				// 	await this.inserter.insertMachines(dbMachines);
-				// } catch (e2) {
-				// 	LOG.error(`Error storing machine data (attempt 2)`, e2);
-				// }
-			}
-
-			try {
-				LOG.debug("Inserting earnings...");
-				await this.inserter.insertEarnings(dbEarnings);
-			} catch (e) {
-				LOG.warn(`Error storing earning data`, e);
-				// try {
-				// 	LOG.debug("Inserting earnings (attempt 2)...");
-				// 	await this.inserter.insertEarnings(dbEarnings);
-				// } catch (e2) {
-				// 	LOG.error(`Error storing earning data (attempt 2)`, e2);
-				// }
 			}
 		} catch (e) {
 			LOG.error(`Error storing data in database`, e);

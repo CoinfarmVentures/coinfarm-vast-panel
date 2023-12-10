@@ -13,9 +13,10 @@
 			"preLaunchTask": "build",
 			"outFiles": ["${workspaceFolder}/collector/dist/**/*.js"],
 			"env": {
-				"POLL_INTERVAL_SEC": "10",
+				"POLL_INTERVAL_SEC": "60",
 				"KEEP_CREDENTIALS": "true",
-				"DB_HOSTNAME": "127.0.0.1"
+				"DB_HOSTNAME": "127.0.0.1",
+				"DB_PORT": "5001"
 			}
 		}
 	]

@@ -1,4 +1,4 @@
-import { API_Earnings, API_Machine, DB_Earnings, DB_Machine } from "./models";
+import { API_Machine, DB_Machine } from "./models";
 
 function countInstances(str: string, word: string) {
 	return str.split(word).length - 1;
@@ -25,6 +25,7 @@ const convertMachine = (apiMachine: API_Machine): DB_Machine => {
 		NumGpusDemandOcc: Number(gpusDemandOccupied) ?? 0,
 		NumGpusSpotOcc: Number(gpusSpotOccupied) ?? 0,
 		NumGpusVacant: Number(gpusVacant) ?? 0,
+		PcieBwGBs: Number(apiMachine.pcie_bw) ?? 0,
 		DiskFreeGB: Number(apiMachine.disk_space) ?? 0,
 		DiskBwGBs: Number(apiMachine.disk_bw) ?? 0,
 		InetUpMbps: Number(apiMachine.inet_up) ?? 0,
@@ -37,23 +38,13 @@ const convertMachine = (apiMachine: API_Machine): DB_Machine => {
 			(Number(apiMachine.current_rentals_on_demand) ?? 0),
 		Reliability: Number(apiMachine.reliability2 ?? 0),
 		Listed: Boolean(apiMachine.listed),
+		ListedInetDownPrice: Number(apiMachine.listed_inet_down_cost) ?? 0,
+		ListedInetUpPrice: Number(apiMachine.listed_inet_up_cost) ?? 0,
+		ListedMinGpus: Number(apiMachine.listed_min_gpu_count) ?? 0,
+		ListedStoragePrice: Number(apiMachine.listed_storage_cost) ?? 0,
 	};
 };
 
 export const convertMachines = (apiMachines: API_Machine[]): DB_Machine[] => {
 	return apiMachines.map((raw) => convertMachine(raw));
-};
-
-const convertEarning = (apiEarnings: API_Earnings): DB_Earnings => {
-	return {
-		MachineID: apiEarnings.machine_id,
-		GpuEarn: apiEarnings.gpu_earn,
-		StoEarn: apiEarnings.sto_earn,
-		UploadEarn: apiEarnings.bwu_earn,
-		DownloadEarn: apiEarnings.bwd_earn,
-	};
-};
-
-export const convertEarnings = (apiMachines: API_Earnings[]): DB_Earnings[] => {
-	return apiMachines.map((raw) => convertEarning(raw));
 };

@@ -1,11 +1,10 @@
-import { DB_ConnectionInfo, DB_Earnings, DB_Machine } from "./models";
+import { DB_ConnectionInfo, DB_Machine } from "./models";
 import mysql from "mysql";
 import { levels as LOG } from "./logging";
 
 interface IDBInserter {
 	connectionInfo: DB_ConnectionInfo;
 	insertMachines(data: DB_Machine[]): Promise<void>;
-	insertEarnings(data: DB_Earnings[]): Promise<void>;
 }
 
 export class DBInserter implements IDBInserter {
@@ -93,18 +92,7 @@ export class DBInserter implements IDBInserter {
 
 		let queryStr = `INSERT INTO machines VALUES\n`;
 		deduped.forEach((machine: DB_Machine) => {
-			queryStr += `(NOW(), '${machine.Hostname}', ${machine.MachineID}, ${machine.MaxGpuTemp}, ${machine.ListedGpuRate}, ${machine.NumGpus}, ${machine.NumGpusDemandOcc}, ${machine.NumGpusSpotOcc}, ${machine.NumGpusVacant}, ${machine.DiskFreeGB}, ${machine.DiskBwGBs}, ${machine.InetUpMbps}, ${machine.InetDownMbps}, ${machine.EarnHour}, ${machine.EarnDay}, ${machine.NumStoredRentalsDemand}, ${machine.NumStoredRentalsSpot}, ${machine.Reliability}),\n`;
-		});
-		queryStr = queryStr.substring(0, queryStr.length - 2);
-		queryStr += `;`;
-
-		await this.insert(queryStr);
-	}
-
-	async insertEarnings(data: DB_Earnings[]): Promise<void> {
-		let queryStr = `INSERT INTO earnings VALUES\n`;
-		data.forEach((machine: DB_Earnings) => {
-			queryStr += `(NOW(), ${machine.MachineID}, ${machine.GpuEarn}, ${machine.StoEarn}, ${machine.UploadEarn}, ${machine.DownloadEarn}),\n`;
+			queryStr += `(NOW(), '${machine.Hostname}', ${machine.MachineID}, ${machine.MaxGpuTemp}, ${machine.ListedGpuRate}, ${machine.NumGpus}, ${machine.NumGpusDemandOcc}, ${machine.NumGpusSpotOcc}, ${machine.NumGpusVacant}, ${machine.DiskFreeGB}, ${machine.DiskBwGBs}, ${machine.InetUpMbps}, ${machine.InetDownMbps}, ${machine.EarnHour}, ${machine.EarnDay}, ${machine.NumStoredRentalsDemand}, ${machine.NumStoredRentalsSpot}, ${machine.Reliability}, ${machine.PcieBwGBs}, ${machine.ListedInetDownPrice}, ${machine.ListedInetUpPrice}, ${machine.ListedMinGpus}, ${machine.ListedStoragePrice}),\n`;
 		});
 		queryStr = queryStr.substring(0, queryStr.length - 2);
 		queryStr += `;`;

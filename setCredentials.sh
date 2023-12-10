@@ -19,13 +19,13 @@ function build_collector {
 echo "What is your Vast user ID? This must be a number. Refer to README.md"
 read -r USER_ID
 
-echo "What is your Vast auth_tkt key in the format 'xxxxxx....userid_type:b64unicode'? Refer to README.md"
-read -r AUTH_KEY
+echo "What is your hexadecimal Vast.ai API key? Refer to README.md"
+read -r API_KEY
 
 CRED_PATH="./collector/credentials.json"
 
 echo "Saving credentials to ${CRED_PATH}..."
-echo "{\"authKey\": \"${AUTH_KEY}\", \"userId\": ${USER_ID}}" > $CRED_PATH
+echo "{\"apiKey\": \"${API_KEY}\", \"userId\": ${USER_ID}}" > $CRED_PATH
 
 echo "Would you like to rebuild the collector? If this is the first-time setup, say 'n'. If you are updating the credentials, say 'y'"
 

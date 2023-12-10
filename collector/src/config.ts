@@ -8,8 +8,11 @@ export const VAST_API_HOSTNAME = process.env.VAST_API_HOSTNAME ?? "cloud.vast.ai
 
 export const DB_CONN_INFO: DB_ConnectionInfo = {
 	host: process.env.DB_HOSTNAME ?? "coinfarm-vast-panel-db", //:5001 "127.0.0.1",
-	port: 3306,
+	port: Number(process.env.DB_PORT ?? 3306),
 	username: "collector",
 	password: "collector",
 	schema: "vast",
 };
+
+export const PROC_TIMEOUT_MS = 10 * 1000;
+export const PROC_EXEC_NAME = `"${process.cwd()}/bin/vastcli_121023.py"`;

@@ -1,20 +1,4 @@
-export interface API_Earnings_Resp {
-	[machineId: string]: API_Earnings;
-}
-
-export interface API_Earnings {
-	machine_id: number;
-	gpu_earn: number;
-	sto_earn: number;
-	bwu_earn: number;
-	bwd_earn: number;
-	timestamp: number;
-}
-
-export interface API_Machine_Resp {
-	[machineId: string]: API_Machine;
-}
-
+export type API_Machine_Resp = API_Machine[];
 export interface API_Machine {
 	id: number;
 	machine_id: number;
@@ -69,15 +53,8 @@ export interface API_Machine {
 
 export interface Credentials {
 	userId: number;
-	authKey: string;
-}
-
-export interface DB_Earnings {
-	MachineID: number;
-	GpuEarn: number;
-	StoEarn: number;
-	UploadEarn: number;
-	DownloadEarn: number;
+	//authKey: string;
+	apiKey: string;
 }
 
 export interface DB_Machine {
@@ -99,6 +76,11 @@ export interface DB_Machine {
 	NumStoredRentalsSpot: number;
 	Reliability: number;
 	Listed: boolean;
+	ListedInetDownPrice: number;
+	ListedInetUpPrice: number;
+	ListedStoragePrice: number;
+	ListedMinGpus: number;
+	PcieBwGBs: number;
 }
 
 export interface DB_ConnectionInfo {

@@ -11,17 +11,13 @@ A free, powerful monitoring interface for hosts on Vast.ai
 5. 5GB of disk space
 6. Minimal CPU time (3-4% peak usage on a Ryzen 7 5800x, 0.1-0.2% average)
 
+The Python Vast.ai CLI utility is already included. If it's out of date, please open an issue on Github.
+
 ## Setup
 
-Clone this repository. Run `chmod 700 -R setup.sh update.sh build.sh restart.sh updateCredentials.sh` if you're on Linux
+Clone this repository. Run `chmod 700 -R setup.sh update.sh build.sh restart.sh updateCredentials.sh updateDb.sh` if you're on Linux
 
-Navigate to https://cloud.vast.ai/host/machines/# in your web browser
-
-Open the debugging console with 'inspect element' (F12 key). Enter this code: 
-
-`document.cookie.match(/auth_tkt=(.*b64unicode);/i)[0].split("auth_tkt=")[1].split(";")[0]`
-
-The output is your authentication token. Save it for later
+Go to https://cloud.vast.ai/account/ and find your API key.
 
 Navigate to https://cloud.vast.ai/api/v0/users/current/ in your web browser
 
@@ -61,3 +57,13 @@ Then run `updateCredentials.sh`. Answer `y` to rebuild the collector. Finally, s
 docker compose down
 docker compose up
 ```
+
+## Updating
+
+To update to a new version of the application, run `update.sh`. 
+
+If there were changes to the database, you'll have to run `updateDb.sh` after that. Please back up your data using the MySQL Workbench export tool.
+
+## Deleting old machines
+
+If there are machines clogging up the dashboard that you don't want to see anymore, you need to run `deleteMachine.sh`. Data will be permanently lost.

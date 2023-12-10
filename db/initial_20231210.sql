@@ -917,16 +917,6 @@ CREATE TABLE `sys_config` (
   PRIMARY KEY (`variable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sys_config`
---
-
-LOCK TABLES `sys_config` WRITE;
-/*!40000 ALTER TABLE `sys_config` DISABLE KEYS */;
-INSERT INTO `sys_config` VALUES ('diagnostics.allow_i_s_tables','OFF','2023-05-06 03:30:33',NULL),('diagnostics.include_raw','OFF','2023-05-06 03:30:33',NULL),('ps_thread_trx_info.max_length','65535','2023-05-06 03:30:33',NULL),('statement_performance_analyzer.limit','100','2023-05-06 03:30:33',NULL),('statement_performance_analyzer.view',NULL,'2023-05-06 03:30:33',NULL),('statement_truncate_len','64','2023-05-06 03:30:33',NULL);
-/*!40000 ALTER TABLE `sys_config` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -5953,7 +5943,7 @@ DELIMITER ;
 -- Current Database: `vast`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `vast` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `vast` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 
 USE `vast`;
 
@@ -5971,20 +5961,9 @@ CREATE TABLE `earnings` (
   `StoEarn` double NOT NULL,
   `UploadEarn` double NOT NULL,
   `DownloadEarn` double NOT NULL,
-  PRIMARY KEY (`Time`),
-  UNIQUE KEY `Time_UNIQUE` (`Time`) /*!80000 INVISIBLE */,
   KEY `Machine` (`MachineID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `earnings`
---
-
-LOCK TABLES `earnings` WRITE;
-/*!40000 ALTER TABLE `earnings` DISABLE KEYS */;
-/*!40000 ALTER TABLE `earnings` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `machines`
@@ -5995,6 +5974,7 @@ DROP TABLE IF EXISTS `machines`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `machines` (
   `Time` datetime NOT NULL,
+  `Hostname` varchar(100) DEFAULT NULL,
   `MachineID` int NOT NULL,
   `MaxGpuTemp` int NOT NULL,
   `ListedGpuRate` double NOT NULL,
@@ -6010,20 +5990,15 @@ CREATE TABLE `machines` (
   `EarnDay` double NOT NULL,
   `NumStoredRentalsDemand` int NOT NULL,
   `NumStoredRentalsSpot` int NOT NULL,
-  PRIMARY KEY (`Time`),
-  UNIQUE KEY `Time_UNIQUE` (`Time`),
+  `Reliability` double NOT NULL DEFAULT '-1',
+  `PcieBwGBs` double NOT NULL,
+  `ListedInetDownPrice` double NOT NULL,
+  `ListedInetUpPrice` double NOT NULL,
+  `ListedMinGpus` int NOT NULL,
+  `ListedStoragePrice` double NOT NULL,
   KEY `Machine` (`MachineID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `machines`
---
-
-LOCK TABLES `machines` WRITE;
-/*!40000 ALTER TABLE `machines` DISABLE KEYS */;
-/*!40000 ALTER TABLE `machines` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Dumping events for database 'vast'
@@ -7854,4 +7829,4 @@ USE `vast`;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-06 12:12:45
+-- Dump completed on 2023-12-10 17:27:15

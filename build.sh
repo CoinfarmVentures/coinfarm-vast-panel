@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Define a root password for MySQL (you will never see this again):"
+echo "Define a new root password for MySQL (you will never see this again so write it down):"
 read -r BUILD_MYSQL_ROOT_PASSWORD
 
 echo "Composing stack... "
