@@ -3,3 +3,5 @@ grafana/data/
 grafana/data_old*
 db/backup*
 db/password_sql.txt
+
+dbbackup121123v1.sql

@@ -92,7 +92,7 @@ export class DBInserter implements IDBInserter {
 
 		let queryStr = `INSERT INTO machines VALUES\n`;
 		deduped.forEach((machine: DB_Machine) => {
-			queryStr += `(NOW(), '${machine.Hostname}', ${machine.MachineID}, ${machine.MaxGpuTemp}, ${machine.ListedGpuRate}, ${machine.NumGpus}, ${machine.NumGpusDemandOcc}, ${machine.NumGpusSpotOcc}, ${machine.NumGpusVacant}, ${machine.DiskFreeGB}, ${machine.DiskBwGBs}, ${machine.InetUpMbps}, ${machine.InetDownMbps}, ${machine.EarnHour}, ${machine.EarnDay}, ${machine.NumStoredRentalsDemand}, ${machine.NumStoredRentalsSpot}, ${machine.Reliability}, ${machine.PcieBwGBs}, ${machine.ListedInetDownPrice}, ${machine.ListedInetUpPrice}, ${machine.ListedMinGpus}, ${machine.ListedStoragePrice}),\n`;
+			queryStr += `(NOW(), '${machine.Hostname}', ${machine.MachineID}, ${machine.MaxGpuTemp}, ${machine.ListedGpuRate}, ${machine.NumGpus}, ${machine.NumGpusDemandOcc}, ${machine.NumGpusSpotOcc}, ${machine.NumGpusVacant}, ${machine.DiskFreeGB}, ${machine.DiskBwGBs}, ${machine.InetUpMbps}, ${machine.InetDownMbps}, ${machine.EarnHour}, ${machine.EarnDay}, ${machine.NumStoredRentalsDemand}, ${machine.NumStoredRentalsSpot}, ${machine.Reliability}),\n`;
 		});
 		queryStr = queryStr.substring(0, queryStr.length - 2);
 		queryStr += `;`;

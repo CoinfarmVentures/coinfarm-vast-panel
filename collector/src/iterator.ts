@@ -28,7 +28,7 @@ export class Iterator implements IIterator {
 			} catch (e) {
 				LOG.error(`General error during first iteration: ${e}`);
 			}
-		}, 0);
+		}, 60000);
 
 		setInterval(async () => {
 			try {

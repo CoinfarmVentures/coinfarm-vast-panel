@@ -5990,12 +5990,7 @@ CREATE TABLE `machines` (
   `EarnDay` double NOT NULL,
   `NumStoredRentalsDemand` int NOT NULL,
   `NumStoredRentalsSpot` int NOT NULL,
-  `Reliability` double NOT NULL DEFAULT '-1',
-  `PcieBwGBs` double NOT NULL,
-  `ListedInetDownPrice` double NOT NULL,
-  `ListedInetUpPrice` double NOT NULL,
-  `ListedMinGpus` int NOT NULL,
-  `ListedStoragePrice` double NOT NULL,
+  `Reliability` double NOT NULL DEFAULT '-1'
   KEY `Machine` (`MachineID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
