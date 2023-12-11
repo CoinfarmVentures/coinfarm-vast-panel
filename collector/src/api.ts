@@ -1,5 +1,5 @@
 import { CmdLine } from "./cmdline";
-import { PROC_EXEC_NAME, PROC_TIMEOUT_MS } from "./config";
+import { CLI_LOCATION, PROC_TIMEOUT_MS, PYTHON_EXEC_NAME } from "./config";
 import { API_Machine, API_Machine_Resp, Credentials } from "./models";
 import { levels as LOG } from "./logging";
 
@@ -16,7 +16,7 @@ export class CliVastAPI implements IVastAPI {
 
 	async cliExecute(command: string): Promise<JSON> {
 		const cmd = new CmdLine(
-			`python3 ${PROC_EXEC_NAME} ${command} --api-key ${this.credentials.apiKey} --raw`,
+			`${PYTHON_EXEC_NAME} ${CLI_LOCATION} ${command} --api-key ${this.credentials.apiKey} --raw`,
 			PROC_TIMEOUT_MS
 		);
 		const outputRaw = await cmd.execute();
@@ -28,7 +28,7 @@ export class CliVastAPI implements IVastAPI {
 		try {
 			return JSON.parse(outputRaw);
 		} catch (e) {
-			throw new Error(`Output is invalid JSON: ${e}`);
+			throw new Error(`Output is invalid JSON: ${e} ${outputRaw}`);
 		}
 	}
 

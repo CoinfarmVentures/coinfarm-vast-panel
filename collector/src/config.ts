@@ -3,6 +3,7 @@ import { DB_ConnectionInfo } from "./models";
 export const POLL_INTERVAL_SEC = process.env.POLL_INTERVAL_SEC
 	? Number(process.env.POLL_INTERVAL_SEC)
 	: 5 * 60;
+export const SKIP_START_DELAY = Boolean(process.env.SKIP_START_DELAY ?? false);
 
 export const VAST_API_HOSTNAME = process.env.VAST_API_HOSTNAME ?? "cloud.vast.ai";
 
@@ -15,4 +16,8 @@ export const DB_CONN_INFO: DB_ConnectionInfo = {
 };
 
 export const PROC_TIMEOUT_MS = 10 * 1000;
-export const PROC_EXEC_NAME = `"${process.cwd()}/bin/vastcli_121023.py"`;
+const CWD = process.cwd();
+export const CLI_LOCATION = CWD.includes("collector")
+	? `"${CWD}/bin/vastcli_112623.py"`
+	: `"${CWD}/collector/bin/vastcli_112623.py"`;
+export const PYTHON_EXEC_NAME = process.env.PYTHON_EXEC_NAME ?? "python3";

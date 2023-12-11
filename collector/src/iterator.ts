@@ -1,5 +1,5 @@
 import { CliVastAPI } from "./api";
-import { DB_CONN_INFO } from "./config";
+import { DB_CONN_INFO, SKIP_START_DELAY } from "./config";
 import { convertMachines } from "./conversion";
 import { DBInserter } from "./db";
 import { API_Machine, Credentials, DB_Machine } from "./models";
@@ -22,13 +22,14 @@ export class Iterator implements IIterator {
 	}
 
 	start(): void {
+		const firstIterDelay = SKIP_START_DELAY ? 0 * 1000 : 60 * 1000;
 		setTimeout(async () => {
 			try {
 				await this.iteration();
 			} catch (e) {
 				LOG.error(`General error during first iteration: ${e}`);
 			}
-		}, 60000);
+		}, firstIterDelay);
 
 		setInterval(async () => {
 			try {
