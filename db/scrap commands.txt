@@ -2,8 +2,8 @@ mysql -u collector -p vast -e "DELETE FROM machines WHERE Hostname = '15693'"
 
 mysql -u root -p sys -e "UPDATE mysql.user SET Password=PASSWORD('root') WHERE User='root'"
 
+# these are old, deactivated credentials
 python /var/lib/coinfarm-vast-panel-collector/bin/vastcli_121023.py "show machines --api-key 463ae514b53b026969b0463736d93f5c166a7e9d235a2d6a503924be558bc42b --raw"
-
 python3 /var/lib/coinfarm-vast-panel-collector/bin/vastcli_121023.py "show machines --api-key 463ae514b53b026969b0463736d93f5c166a7e9d235a2d6a503924be558bc42b --raw"
 
 
